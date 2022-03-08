@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: Check out code
+      uses: actions/checkout@v2
     # Configuration AWS Credentials
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
