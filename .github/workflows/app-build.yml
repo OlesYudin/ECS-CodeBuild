@@ -26,7 +26,6 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: olesyudin/password-generator # Define repository to push
         tags: |
           type=raw,value=action-{{date 'DD-MM-YYYY'}}-{{branch}}-{{sha}}
 
