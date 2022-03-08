@@ -30,5 +30,5 @@ jobs:
         ECR_REPOSITORY: test
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./App/Dockerfile
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./home/runner/work/TEST-ECS-Actions/TEST-ECS-Actions/App/
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
