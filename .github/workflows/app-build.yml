@@ -28,7 +28,7 @@ jobs:
       with:
         images: olesyudin/password-generator # Define repository to push
         tags: |
-          type=raw,value=action-{{date 'DD.MM.YYYY'}}-{{branch}}-{{sha}}
+          type=raw,value=action-{{date 'DD-MM-YYYY'}}-{{branch}}-{{sha}}
 
     # Login to ECR
     - name: Login to AWS ECR
