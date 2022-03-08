@@ -31,7 +31,8 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         pwd
-        ls -la
-        ls -la Lesson_14.1_ECS+GithubActions/App | grep Dockerfile
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./App
+        ls -la ../
+        ls -la ../../
+        ls -la ../App | grep Dockerfile
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ../App
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
