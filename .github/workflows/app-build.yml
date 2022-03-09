@@ -35,8 +35,9 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}
+        # Example of tag: action-01.01.1970-main-56gd784
         tags: |
-          type=raw,value=action-{{date 'DD-MM-YYYY'}}-{{branch}}-{{sha}}
+          type=raw,value={{sha}}
 
     # Build docker image and push to ECR
     - name: Build docker image and push to AWS ECR
