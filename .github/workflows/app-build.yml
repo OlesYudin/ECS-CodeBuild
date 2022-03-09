@@ -38,7 +38,6 @@ jobs:
 
     # Build docker image and push to ECR
     - name: Build docker image and push to AWS ECR
-
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: test
@@ -47,23 +46,22 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./App
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       
-      # Download task defenition from ECS
-      - name: Download task definition
-        run: |
-          aws ecs describe-task-definition --task-definition service \
-          --query taskDefinition > task-definition.json
+    # Download task defenition from ECS
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition --task-definition service \
+        --query taskDefinition > task-definition.json
       
-      # Copy new image ID of docker container to AWS ECS task definition
-      - name: Copy new docker container to AWS ECS
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: application
-          image: ${{ steps.build-image.outputs.image }}
+    # Copy new image ID of docker container to AWS ECS task definition
+    - name: Copy new docker container to AWS ECS
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        image: ${{ steps.build-image.outputs.image }}
       
-      # Run new AWS ECS task definition
-      - name: Deploy AWS ECS task definition
+    # Run new AWS ECS task definition
+    - name: Deploy AWS ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
