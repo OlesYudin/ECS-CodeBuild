@@ -43,13 +43,14 @@ jobs:
     - name: Build docker image and push to AWS ECR
       id: build-image
       env:
+      # TODO:Remove useless envs, rename usefull env
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ steps.docker-tag.outputs.tags }}
+        REGISTRY_REPOSITORY_TAG: ${{ steps.docker-tag.outputs.tags }} # Example: registry/repository:tag
       run: |
-        docker build -t $IMAGE_TAG ./App
-        docker push $IMAGE_TAG
-        echo "::set-output name=image::$IMAGE_TAG"
+        docker build -t $REGISTRY_REPOSITORY_TAG ./App
+        docker push $REGISTRY_REPOSITORY_TAG
+        echo "::set-output name=image::$REGISTRY_REPOSITORY_TAG"
 
     # Download task defenition from ECS
     - name: Download task definition
@@ -62,8 +63,8 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: Passwd-gen
-        image: ${{ steps.build-image.outputs.image }}
+        container-name: Passwd-gen # TODO: Dont hardcode this
+        image: ${{ steps.docker-tag.outputs.tags }} # Example: registry/repository:tag
       
     # Run new AWS ECS task definition
     - name: Deploy AWS ECS task definition
