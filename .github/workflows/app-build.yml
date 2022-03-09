@@ -50,7 +50,8 @@ jobs:
     # Download task defenition from ECS
     - name: Download task definition
       run: |
-        aws ecs describe-task-definition --task-definition password_generator-dev-service \
+      aws ecs describe-task-definition \ 
+        --task-definition assword_generator-dev-service \
         --query taskDefinition > task-definition.json
       
     # Copy new image ID of docker container to AWS ECS task definition
