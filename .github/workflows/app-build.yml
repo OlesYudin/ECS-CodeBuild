@@ -1,10 +1,11 @@
 name: APP builder CI/CD
 
 on:
+  # Manual trigger
+  workflow_dispatch:
   push:
     branches: [ main ]
-  # Run workflow manualy
-  # workflow_dispatch:
+
 
 jobs:
   docker-build:
