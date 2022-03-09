@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "task-definition" {
 
 # Execute task definition on created cluster
 resource "aws_ecs_service" "password-generator" {
-  name            = "${var.app_name}-${var.env}"
+  name            = "${var.app_name}-${var.env}-service"
   cluster         = aws_ecs_cluster.ecs-cluster.id
   task_definition = aws_ecs_task_definition.task-definition.arn
 
