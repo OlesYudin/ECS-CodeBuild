@@ -24,13 +24,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
 
-    # # Use spesific tags for docker images
-    # - name: Docker meta tag
-    #   id: meta
-    #   uses: docker/metadata-action@v3
-    #   with:
-    #     tags: |
-    #       type=raw,value=action-{{date 'DD-MM-YYYY'}}-{{branch}}-{{sha}}
+    # Use spesific tags for docker images
+    - name: Create tag for Docker image
+      id: docker-tag
+      uses: docker/metadata-action@v3
+      with:
+        tags: |
+          type=raw,value=action-{{date 'DD-MM-YYYY'}}-{{branch}}-{{sha}}
 
     # Login to ECR
     - name: Login to AWS ECR
@@ -42,8 +42,8 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: test
-        IMAGE_TAG: ${{ github.sha }}
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ steps.docker-tag.outputs.tags }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./App
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
