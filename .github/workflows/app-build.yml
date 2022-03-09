@@ -24,18 +24,19 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
 
+    # Login to ECR
+    - name: Login to AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
     # Use spesific tags for docker images
     - name: Create tag for Docker image
       id: docker-tag
       uses: docker/metadata-action@v3
       with:
+        images: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}
         tags: |
           type=raw,value=action-{{date 'DD-MM-YYYY'}}-{{branch}}-{{sha}}
-
-    # Login to ECR
-    - name: Login to AWS ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
 
     # Build docker image and push to ECR
     - name: Build docker image and push to AWS ECR
