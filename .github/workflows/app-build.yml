@@ -38,7 +38,6 @@ jobs:
 
     # Build docker image and push to ECR
     - name: Build docker image and push to AWS ECR
-      id: build-image
 
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
