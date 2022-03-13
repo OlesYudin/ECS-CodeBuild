@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "task-definition" {
 
   # Required if use Fargate
   runtime_platform {
-    operating_system_family = "LINUX" # The valid values for Amazon ECS tasks hosted on Fargate are LINUX, WINDOWS_SERVER_2019_FULL, and WINDOWS_SERVER_2019_CORE.
+    operating_system_family = "LINUX" # The valid values for Amazon ECS tasks hosted on Fargate are LINUX, WINDOWS_SERVER_2019_FULL, and WINDOWS_SERVER_2019_CORE
     cpu_architecture        = "X86_64"
   }
 }
