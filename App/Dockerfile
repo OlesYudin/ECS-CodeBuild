@@ -1,6 +1,9 @@
 # Get from alpine image
 FROM alpine:3.15
 
+# Open 80 port
+EXPOSE 80
+
 # Description of project
 LABEL author="Student" \
       description="Test images with Alpine" \
@@ -24,8 +27,5 @@ RUN set -e && \
 # COPY files and dirs
 COPY httpd.conf /etc/apache2/httpd.conf
 COPY htdocs /var/www/localhost/htdocs
-
-# Open 80 port
-EXPOSE 80
 
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
