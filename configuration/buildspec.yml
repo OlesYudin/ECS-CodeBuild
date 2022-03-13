@@ -18,7 +18,7 @@ phases:
       # Push image to ECR 
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
-      # name - task definition of ECS Cluster
+      # name - container name of task definition ECS Cluster (Container definition name)
       - printf '[{"name":"Passwd-gen","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
