@@ -11,13 +11,7 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH:=latest-codebuild}
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
-      - ps -aux | grep docker
-      - apt-get install -y docker.io
-      - service docker start
-      - docker build -t $REPOSITORY_URI:latest ./App
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t $REPOSITORY_URI::$IMAGE_TAG ./App
   post_build:
     commands:
       - echo Build completed on `date`
