@@ -12,13 +12,15 @@ phases:
   build:
     commands:
     # Build docker image 
+      - docker build -t $REPOSITORY_URI:latest ./App
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG ./App
   post_build:
     commands:
       # Push image to ECR 
+      - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
       # name - container name of task definition ECS Cluster (Container definition name)
-      - printf '[{"name":"Passwd-gen","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"Container-password_generator-dev","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json
