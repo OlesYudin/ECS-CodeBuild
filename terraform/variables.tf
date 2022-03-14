@@ -45,3 +45,27 @@ variable "instance_type" {
 variable "app_port" {
   default = 80
 }
+
+# Codebuild
+# Github credentials that stored in AWS Secret Manager
+variable "github_credential" {
+  default = ""
+}
+variable "github_owner" {
+  default = "OlesYudin"
+}
+# Default github url
+variable "github_url" {
+  default = "https://github.com/OlesYudin/ECS-CodeBuild"
+}
+variable "github_repository_id" {
+  default = "OlesYudin/ECS-CodeBuild"
+}
+# Default path to buildspec.yml
+variable "buildspec" {
+  default = "configuration/buildspec.yml"
+}
+# Default branch for commiting
+variable "github_branch" {
+  default = "main"
+}
