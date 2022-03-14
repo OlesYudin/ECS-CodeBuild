@@ -19,11 +19,17 @@ resource "aws_ecs_task_definition" "task-definition" {
 
   container_definitions = jsonencode([
     {
-      name      = "Passwd-gen",
+      name      = "Container-${var.app_name}-${var.env}",
       image     = "564667093156.dkr.ecr.us-east-2.amazonaws.com/test:latest",
       cpu       = 256,
       memory    = 512,
       essential = true # If essential true, when container crash - all task crash
+      portMappings = [
+        {
+          "containerPort" : "${var.app_port}"
+          "hostPort" : "${var.app_port}"
+        }
+      ]
     }
   ])
 
@@ -48,6 +54,12 @@ resource "aws_ecs_service" "password-generator" {
     subnets          = aws_subnet.public_subnet.*.id
     security_groups  = [aws_security_group.sg.id]
     assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.alb_target.id # ARN of Target group to attach it to ECS
+    container_name   = "Container-${var.app_name}-${var.env}"
+    container_port   = var.app_port
   }
 }
 
