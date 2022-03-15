@@ -1,26 +1,48 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_REGION: "us-east-2"
+    APP_NAME: "password-generator"
+    ENV: "dev"
+    TF_VERSION: "1.1.7"
+
 phases:
   pre_build:
     commands:
-      # Login to AWS
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 564667093156.dkr.ecr.us-east-2.amazonaws.com
-      # Add environment
-      - REPOSITORY_URI=564667093156.dkr.ecr.us-east-2.amazonaws.com/test
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest-codebuild}
+      - cd /usr/bin
+      - curl -s -qL -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - unzip -o terraform.zip
+
+      # # Login to AWS
+      # - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 564667093156.dkr.ecr.us-east-2.amazonaws.com
+      # # Add environment
+      # - REPOSITORY_URI=564667093156.dkr.ecr.us-east-2.amazonaws.com/test
+      # - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      # - IMAGE_TAG=${COMMIT_HASH:=latest-codebuild}
   build:
     commands:
-    # Build docker image 
-      - docker build -t $REPOSITORY_URI:latest ./App
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG ./App
+      - cd "$CODEBUILD_SRC_DIR"
+      - terraform init
+      - terraform plan
+      - terraform apply -auto-approve
+
+
+    # # Build docker image 
+    #   - docker build -t $REPOSITORY_URI:latest ./App
+    #   - docker build -t $REPOSITORY_URI:$IMAGE_TAG ./App
   post_build:
     commands:
-      # Push image to ECR 
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      # name - container name of task definition ECS Cluster (Container definition name)
-      - printf '[{"name":"Container-password_generator-dev","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-artifacts:
-    files: imagedefinitions.json
+      - cd "${CODEBUILD_SRC_DIR}/providers/prod/cluster"
+      - terraform plan -var="image_version=${TAG}" 
+      - terraform apply -var="image_version=${TAG}" -auto-approve
+
+
+      # # Push image to ECR 
+      # - docker push $REPOSITORY_URI:latest
+      # - docker push $REPOSITORY_URI:$IMAGE_TAG
+      # - echo Writing image definitions file...
+      # # name - container name of task definition ECS Cluster (Container definition name)
+      # - printf '[{"name":"Container-password_generator-dev","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+# artifacts:
+#     files: imagedefinitions.json
