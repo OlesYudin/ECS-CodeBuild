@@ -22,7 +22,7 @@ phases:
       # - IMAGE_TAG=${COMMIT_HASH:=latest-codebuild}
   build:
     commands:
-      - cd "$CODEBUILD_SRC_DIR"
+      - cd "$CODEBUILD_SRC_DIR"/terraform
       - terraform init
       - terraform plan
       - terraform apply -auto-approve
