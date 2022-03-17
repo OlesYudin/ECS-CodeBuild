@@ -81,8 +81,8 @@ resource "aws_iam_role_policy_attachment" "codebuild-pipeline-iam-policy" {
   role       = aws_iam_role.codebuild-iam-role.name
   policy_arn = "arn:aws:iam::564667093156:policy/service-role/AWSCodePipelineServiceRole-us-east-2-Pasword-generator-pipeline"
 }
-# Attach Pipelinepolicy to codebuild
-resource "aws_iam_role_policy_attachment" "dynamodb-iam-policy" {
+# Attach Full access policy to codebuild
+resource "aws_iam_role_policy_attachment" "codebuild-full-access-iam-policy" {
   role       = aws_iam_role.codebuild-iam-role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
 }
