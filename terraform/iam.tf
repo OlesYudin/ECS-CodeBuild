@@ -92,9 +92,8 @@ resource "aws_iam_role_policy_attachment" "dynamobd-read-only-iam-policy" {
   role       = aws_iam_role.codebuild-iam-role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
 }
-
-# # Attach Full access codebuild policy to codebuild
-# resource "aws_iam_role_policy_attachment" "codebuild-full-access-iam-policy" {
-#   role       = aws_iam_role.codebuild-iam-role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
-# }
+# Attach Full access codebuild policy to codebuild
+resource "aws_iam_role_policy_attachment" "codebuild-full-access-iam-policy" {
+  role       = aws_iam_role.codebuild-iam-role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
+}
