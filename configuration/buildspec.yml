@@ -25,15 +25,15 @@ phases:
 
 
 
-    # Build docker image 
+      # Build docker image 
       - docker build -t $REPOSITORY_URI:latest "$CODEBUILD_SRC_DIR"/App
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG "$CODEBUILD_SRC_DIR"/App
+      # Push docker image to AWS
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       # Run terraform
       - cd "$CODEBUILD_SRC_DIR"/terraform
       - terraform init
-      - terraform plan -lock=false
       - terraform apply -auto-approve -lock=false
   post_build:
     commands:
