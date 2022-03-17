@@ -26,8 +26,8 @@ phases:
 
 
     # Build docker image 
-      - docker build -t $REPOSITORY_URI:latest ./App
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG ./App
+      - docker build -t $REPOSITORY_URI:latest "$CODEBUILD_SRC_DIR"/App
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG "$CODEBUILD_SRC_DIR"/App
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       # Run terraform
