@@ -33,9 +33,9 @@ phases:
     #   - docker build -t $REPOSITORY_URI:$IMAGE_TAG ./App
   post_build:
     commands:
-      - cd "${CODEBUILD_SRC_DIR}/providers/prod/cluster"
-      - terraform plan -var="image_version=${TAG}" 
-      - terraform apply -var="image_version=${TAG}" -auto-approve
+      # - cd "${CODEBUILD_SRC_DIR}/providers/prod/cluster"
+      # - terraform plan -var="image_version=${TAG}" 
+      # - terraform apply -var="image_version=${TAG}" -auto-approve
 
 
       # # Push image to ECR 
@@ -46,3 +46,4 @@ phases:
       # - printf '[{"name":"Container-password_generator-dev","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 # artifacts:
 #     files: imagedefinitions.json
+
