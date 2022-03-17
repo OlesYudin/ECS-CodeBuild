@@ -32,6 +32,7 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       # Run terraform
       - cd "$CODEBUILD_SRC_DIR"/terraform
+      - terraform init
       - terraform plan -lock=false
       - terraform apply -auto-approve -lock=false
   post_build:
