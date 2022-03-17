@@ -23,7 +23,6 @@ phases:
   build:
     commands:
       - cd "$CODEBUILD_SRC_DIR"/terraform
-      - terraform init
       - terraform plan
       - terraform apply -auto-approve
 
