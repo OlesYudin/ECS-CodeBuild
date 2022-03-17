@@ -69,86 +69,90 @@ resource "aws_codebuild_webhook" "password-generator-webhook" {
   }
 }
 
-# Codestar connection
-# Resource for github connections v2
-resource "aws_codestarconnections_connection" "github-codestar-connect" {
-  name          = "github-codestar-connect"
-  provider_type = "GitHub"
-}
 
-# Pipeline
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codepipeline
-resource "aws_codepipeline" "password-generator-codepipeline" {
-  name     = "Password-generator-${var.env}-codepipeline"
-  role_arn = aws_iam_role.codebuild-iam-role.arn
 
-  artifact_store {
-    location = "codepipeline-us-east-2-222559223966" # Create S3 and give link
-    type     = "S3"
-  }
 
-  stage {
-    name = "Source"
 
-    action {
-      name             = "Source"
-      category         = "Source"
-      owner            = "AWS"
-      provider         = "CodeStarSourceConnection"
-      version          = "1"
-      region           = var.region
-      run_order        = 1
-      namespace        = "SourceVariables"
-      output_artifacts = ["SourceArtifact"]
+# # Codestar connection
+# # Resource for github connections v2
+# resource "aws_codestarconnections_connection" "github-codestar-connect" {
+#   name          = "github-codestar-connect"
+#   provider_type = "GitHub"
+# }
 
-      configuration = {
-        BranchName           = var.github_branch
-        FullRepositoryId     = var.github_repository_id
-        ConnectionArn        = aws_codestarconnections_connection.github-codestar-connect.arn
-        OutputArtifactFormat = "CODE_ZIP"
-      }
-    }
-  }
+# # Pipeline
+# # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/codepipeline
+# resource "aws_codepipeline" "password-generator-codepipeline" {
+#   name     = "Password-generator-${var.env}-codepipeline"
+#   role_arn = aws_iam_role.codebuild-iam-role.arn
 
-  stage {
-    name = "Build"
+#   artifact_store {
+#     location = "aws_s3_bucket.codebuild-s3.name
+#     type     = "S3"
+#   }
 
-    action {
-      name             = "Build"
-      category         = "Build"
-      owner            = "AWS"
-      provider         = "CodeBuild"
-      version          = "1"
-      region           = var.region
-      run_order        = 1
-      namespace        = "BuildVariables"
-      input_artifacts  = ["SourceArtifact"]
-      output_artifacts = ["BuildArtifact"]
+#   stage {
+#     name = "Source"
 
-      configuration = {
-        ProjectName = aws_codebuild_project.password-generator-codebuild-plan.name
-      }
-    }
-  }
+#     action {
+#       name             = "Source"
+#       category         = "Source"
+#       owner            = "AWS"
+#       provider         = "CodeStarSourceConnection"
+#       version          = "1"
+#       region           = var.region
+#       run_order        = 1
+#       namespace        = "SourceVariables"
+#       output_artifacts = ["SourceArtifact"]
 
-  stage {
-    name = "Deploy"
+#       configuration = {
+#         BranchName           = var.github_branch
+#         FullRepositoryId     = var.github_repository_id
+#         ConnectionArn        = aws_codestarconnections_connection.github-codestar-connect.arn
+#         OutputArtifactFormat = "CODE_ZIP"
+#       }
+#     }
+#   }
 
-    action {
-      name            = "Deploy"
-      category        = "Deploy"
-      owner           = "AWS"
-      provider        = "ECS"
-      version         = "1"
-      run_order       = 1
-      region          = var.region
-      namespace       = "DeployVariables"
-      input_artifacts = ["BuildArtifact"]
+#   stage {
+#     name = "Build"
 
-      configuration = {
-        ClusterName = aws_ecs_cluster.ecs-cluster.name
-        ServiceName = aws_ecs_service.password-generator.name
-      }
-    }
-  }
-}
+#     action {
+#       name             = "Build"
+#       category         = "Build"
+#       owner            = "AWS"
+#       provider         = "CodeBuild"
+#       version          = "1"
+#       region           = var.region
+#       run_order        = 1
+#       namespace        = "BuildVariables"
+#       input_artifacts  = ["SourceArtifact"]
+#       output_artifacts = ["BuildArtifact"]
+
+#       configuration = {
+#         ProjectName = aws_codebuild_project.password-generator-codebuild-plan.name
+#       }
+#     }
+#   }
+
+#   stage {
+#     name = "Deploy"
+
+#     action {
+#       name            = "Deploy"
+#       category        = "Deploy"
+#       owner           = "AWS"
+#       provider        = "ECS"
+#       version         = "1"
+#       run_order       = 1
+#       region          = var.region
+#       namespace       = "DeployVariables"
+#       input_artifacts = ["BuildArtifact"]
+
+#       configuration = {
+#         ClusterName = aws_ecs_cluster.ecs-cluster.name
+#         ServiceName = aws_ecs_service.password-generator.name
+#       }
+#     }
+#   }
+# }
