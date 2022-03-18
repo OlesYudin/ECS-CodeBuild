@@ -26,9 +26,8 @@ resource "aws_codebuild_project" "password-generator-codebuild-plan" {
     privileged_mode             = true              # All command in pipeline will run with sudo
 
     environment_variable {
-      name  = "github-auth"
-      value = var.github_credential
-      type  = "SECRETS_MANAGER"
+      name  = "environment"
+      value = var.env
     }
   }
 
@@ -69,7 +68,23 @@ resource "aws_codebuild_webhook" "password-generator-webhook" {
   }
 }
 
+resource "aws_ssm_parameter" "ssm-github-auth" {
+  name        = "GitHubAuth-${var.app_name}-${var.env}"
+  description = "Github token for codebuild auth"
+  type        = "SecureString"
+  value       = var.github_credential
 
+  tags = {
+    name = "GitHubAuth"
+    env  = var.env
+  }
+}
+
+resource "aws_codebuild_source_credential" "github-auth-credential" {
+  auth_type   = "PERSONAL_ACCESS_TOKEN"
+  server_type = "GITHUB"
+  token       = aws_ssm_parameter.ssm-github-auth.value
+}
 
 
 
