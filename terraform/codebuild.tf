@@ -83,7 +83,7 @@ resource "aws_ssm_parameter" "ssm-github-auth" {
 resource "aws_codebuild_source_credential" "github-auth-credential" {
   auth_type   = "PERSONAL_ACCESS_TOKEN"
   server_type = "GITHUB"
-  token       = aws_ssm_parameter.ssm-github-auth.value
+  token       = var.github_credential
 }
 
 
