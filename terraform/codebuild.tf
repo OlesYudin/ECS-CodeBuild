@@ -83,7 +83,7 @@ resource "aws_ssm_parameter" "ssm-github-auth" {
 resource "aws_codebuild_source_credential" "github-auth-credential" {
   auth_type   = "PERSONAL_ACCESS_TOKEN"
   server_type = "GITHUB"
-  token       = var.github_credential
+  token       = aws_ssm_parameter.ssm-github-auth.value
 }
 
 
@@ -102,7 +102,7 @@ resource "aws_codebuild_source_credential" "github-auth-credential" {
 #   role_arn = aws_iam_role.codebuild-iam-role.arn
 
 #   artifact_store {
-#     location = "aws_s3_bucket.codebuild-s3.name
+#     location = aws_s3_bucket.codebuild-s3.name
 #     type     = "S3"
 #   }
 

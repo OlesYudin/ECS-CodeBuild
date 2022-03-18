@@ -13,7 +13,6 @@ phases:
       - cd /usr/bin
       - curl -s -qL -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
       - unzip -o terraform.zip
-
       # Login to AWS
       - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 564667093156.dkr.ecr.us-east-2.amazonaws.com
       # Add environment
@@ -22,9 +21,6 @@ phases:
       - IMAGE_TAG=${COMMIT_HASH:=latest-codebuild}
   build:
     commands:
-
-
-
       # Build docker image 
       - docker build -t $REPOSITORY_URI:latest "$CODEBUILD_SRC_DIR"/App
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG "$CODEBUILD_SRC_DIR"/App
@@ -50,4 +46,3 @@ phases:
       # - printf '[{"name":"Container-password_generator-dev","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 # artifacts:
 #     files: imagedefinitions.json
-
