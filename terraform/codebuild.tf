@@ -86,6 +86,11 @@ resource "aws_codebuild_source_credential" "github-auth-credential" {
   token       = aws_ssm_parameter.ssm-github-auth.value
 }
 
+# resource "null_resource" "import_source_credentials" {
+#   provisioner "local-exec" {
+#     command = "sudo aws --region us-east-2 codebuild import-source-credentials --token ${var.github_credential} --server-type GITHUB --auth-type PERSONAL_ACCESS_TOKEN"
+#   }
+# }
 
 
 # # Codestar connection
