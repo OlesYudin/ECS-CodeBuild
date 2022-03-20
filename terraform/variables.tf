@@ -49,7 +49,7 @@ variable "app_port" {
 # Codebuild
 # Github credentials that stored in AWS Secret Manager
 variable "github_credential" {
-  default = "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"
+  default = ""
 }
 variable "github_owner" {
   default = "OlesYudin"
